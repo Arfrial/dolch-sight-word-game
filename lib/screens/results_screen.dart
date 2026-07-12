@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import '../services/storage_service.dart';
 
-class ResultsScreen extends StatelessWidget {
+class ResultsScreen extends StatefulWidget {
   final int score;
   final int total;
 
@@ -12,8 +13,23 @@ class ResultsScreen extends StatelessWidget {
   });
 
   @override
+  State<ResultsScreen> createState() => _ResultsScreenState();
+}
+
+class _ResultsScreenState extends State<ResultsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    saveScore();
+  }
+
+  Future<void> saveScore() async {
+    await StorageService.saveScore(widget.score);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final percent = ((score / total) * 100).round();
+    final percent = ((widget.score / widget.total) * 100).round();
 
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
@@ -40,7 +56,7 @@ class ResultsScreen extends StatelessWidget {
               const SizedBox(height: 30),
 
               Text(
-                "$score / $total",
+                "${widget.score} / ${widget.total}",
                 style: const TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
@@ -62,7 +78,6 @@ class ResultsScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 60,
                 child: ElevatedButton(
-                  child: const Text("Home"),
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
@@ -72,6 +87,10 @@ class ResultsScreen extends StatelessWidget {
                       (route) => false,
                     );
                   },
+                  child: const Text(
+                    "Home",
+                    style: TextStyle(fontSize: 22),
+                  ),
                 ),
               ),
             ],

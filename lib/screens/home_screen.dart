@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'flash_dash_screen.dart';
+import 'stats_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-
             const SizedBox(height: 20),
 
             const Text(
@@ -50,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView.builder(
                 itemCount: levels.length,
                 itemBuilder: (context, index) {
-
                   final level = levels[index];
 
                   return Card(
@@ -79,15 +78,15 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 65,
               child: ElevatedButton(
                 onPressed: () {
-                    Navigator.push(
-                      context,
+                  Navigator.push(
+                    context,
                     MaterialPageRoute(
                       builder: (context) => FlashDashScreen(
                         level: selectedLevel,
                       ),
-                     ),
-                    );
-                  },
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
                   foregroundColor: Colors.white,
@@ -107,7 +106,12 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 65,
               child: ElevatedButton(
                 onPressed: () {
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const StatsScreen(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
