@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import '../data/dolch_words.dart';
+import 'results_screen.dart';
 
 class FlashDashScreen extends StatefulWidget {
   final String level;
@@ -20,6 +21,10 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
 
   int currentIndex = 0;
 
+  int firstTryCorrect = 0;
+  // Keeps track of words the player already missed once.
+  final Set<String> missedWords = {};
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +35,43 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
 
     words = words.take(10).toList();
   }
+
+void knowIt() {
+  if (!missedWords.contains(words[currentIndex])) {
+    firstTryCorrect++;
+  }
+
+  if (currentIndex == words.length - 1) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ResultsScreen(
+          score: firstTryCorrect,
+          total: words.length,
+        ),
+      ),
+    );
+    return;
+  }
+
+  setState(() {
+    currentIndex++;
+  });
+}
+
+void practiceAgain() {
+  setState(() {
+    missedWords.add(words[currentIndex]);
+
+    final word = words.removeAt(currentIndex);
+
+    words.add(word);
+
+    if (currentIndex >= words.length) {
+      currentIndex = words.length - 1;
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +133,7 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
               width: double.infinity,
               height: 65,
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: knowIt,
                 icon: const Icon(Icons.check),
                 label: const Text(
                   "I KNOW IT",
@@ -110,7 +152,7 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
               width: double.infinity,
               height: 65,
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: practiceAgain,
                 icon: const Icon(Icons.refresh),
                 label: const Text(
                   "PRACTICE AGAIN",
