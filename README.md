@@ -117,7 +117,7 @@ flutter run
 
 ### Statistics
 
-![Statistics](screenshots/stats.PNG)
+![Statistics](screenshots/statistics.PNG)
 
 ---
 
