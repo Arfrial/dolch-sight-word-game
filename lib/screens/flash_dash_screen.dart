@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 
-class FlashDashScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import '../data/dolch_words.dart';
+
+class FlashDashScreen extends StatefulWidget {
   final String level;
 
   const FlashDashScreen({
@@ -9,22 +12,119 @@ class FlashDashScreen extends StatelessWidget {
   });
 
   @override
+  State<FlashDashScreen> createState() => _FlashDashScreenState();
+}
+
+class _FlashDashScreenState extends State<FlashDashScreen> {
+  late List<String> words;
+
+  int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    words = List.from(DolchWords.levels[widget.level]!);
+
+    words.shuffle(Random());
+
+    words = words.take(10).toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
-        title: const Text("Flash Dash"),
+        title: const Text("⭐ Flash Dash ⭐"),
         centerTitle: true,
         backgroundColor: Colors.orange,
         foregroundColor: Colors.white,
       ),
-      body: Center(
-        child: Text(
-          level,
-          style: const TextStyle(
-            fontSize: 42,
-            fontWeight: FontWeight.bold,
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          children: [
+
+            Text(
+              "Level: ${widget.level}",
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            LinearProgressIndicator(
+              value: (currentIndex + 1) / words.length,
+              minHeight: 12,
+              borderRadius: BorderRadius.circular(20),
+            ),
+
+            const SizedBox(height: 50),
+
+            Expanded(
+              child: Center(
+                child: Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Container(
+                    width: 320,
+                    height: 220,
+                    alignment: Alignment.center,
+                    child: Text(
+                      words[currentIndex],
+                      style: const TextStyle(
+                        fontSize: 52,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              height: 65,
+              child: ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.check),
+                label: const Text(
+                  "I KNOW IT",
+                  style: TextStyle(fontSize: 22),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 15),
+
+            SizedBox(
+              width: double.infinity,
+              height: 65,
+              child: ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.refresh),
+                label: const Text(
+                  "PRACTICE AGAIN",
+                  style: TextStyle(fontSize: 22),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+          ],
         ),
       ),
     );
