@@ -137,7 +137,7 @@ Some ideas for future development include:
 
 ## Author
 
-Anthony Ryan
+Anthony Frialde
 
 CPSC 4150 – Mobile Application Development
 
