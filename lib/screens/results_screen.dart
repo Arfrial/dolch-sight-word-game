@@ -5,11 +5,13 @@ import 'home_screen.dart';
 class ResultsScreen extends StatefulWidget {
   final int score;
   final int total;
+  final int seconds;
 
   const ResultsScreen({
     super.key,
     required this.score,
     required this.total,
+    required this.seconds,
   });
 
   @override
@@ -27,6 +29,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
     await StorageService.saveScore(widget.score);
   }
 
+  String formatTime(int totalSeconds) {
+    final minutes = totalSeconds ~/ 60;
+    final seconds = totalSeconds % 60;
+
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final percent = ((widget.score / widget.total) * 100).round();
@@ -34,19 +43,19 @@ class _ResultsScreenState extends State<ResultsScreen> {
     String message;
 
     if (percent >= 90) {
-      message = "Amazing!";
+      message = 'Amazing!';
     } else if (percent >= 70) {
-      message = "Great job!";
+      message = 'Great job!';
     } else if (percent >= 50) {
-      message = "Nice work!";
+      message = 'Nice work!';
     } else {
-      message = "Keep practicing!";
+      message = 'Keep practicing!';
     }
 
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
-        title: const Text("⭐ Results ⭐"),
+        title: const Text('⭐ Results ⭐'),
         centerTitle: true,
         backgroundColor: Colors.orange,
         foregroundColor: Colors.white,
@@ -81,7 +90,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                 const SizedBox(height: 12),
 
                 const Text(
-                  "You finished the round!",
+                  'You finished the round!',
                   style: TextStyle(
                     fontSize: 19,
                     color: Colors.black54,
@@ -103,7 +112,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     child: Column(
                       children: [
                         const Text(
-                          "First-Try Score",
+                          'First-Try Score',
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.black54,
@@ -113,7 +122,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         const SizedBox(height: 10),
 
                         Text(
-                          "${widget.score} / ${widget.total}",
+                          '${widget.score} / ${widget.total}',
                           style: const TextStyle(
                             fontSize: 52,
                             fontWeight: FontWeight.bold,
@@ -124,9 +133,33 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         const SizedBox(height: 8),
 
                         Text(
-                          "$percent%",
+                          '$percent%',
                           style: const TextStyle(
                             fontSize: 34,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        const Divider(),
+
+                        const SizedBox(height: 14),
+
+                        const Text(
+                          'Time',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black54,
+                          ),
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        Text(
+                          '⏱ ${formatTime(widget.seconds)}',
+                          style: const TextStyle(
+                            fontSize: 28,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -155,7 +188,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       size: 28,
                     ),
                     label: const Text(
-                      "HOME",
+                      'HOME',
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,

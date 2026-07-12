@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -20,10 +21,12 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
   late List<String> words;
 
   int currentIndex = 0;
-
   int firstTryCorrect = 0;
 
   final Set<String> missedWords = {};
+
+  late Timer timer;
+  int secondsElapsed = 0;
 
   @override
   void initState() {
@@ -32,6 +35,12 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
     words = List.from(DolchWords.levels[widget.level]!);
     words.shuffle(Random());
     words = words.take(10).toList();
+
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      setState(() {
+        secondsElapsed++;
+      });
+    });
   }
 
   void knowIt() {
@@ -40,12 +49,15 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
     }
 
     if (currentIndex == words.length - 1) {
+      timer.cancel();
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (_) => ResultsScreen(
             score: firstTryCorrect,
             total: words.length,
+            seconds: secondsElapsed,
           ),
         ),
       );
@@ -87,12 +99,33 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
             Text(
               "Level: ${widget.level}",
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
+
+            Text(
+              "⏱ Time: ${secondsElapsed ~/ 60}:${(secondsElapsed % 60).toString().padLeft(2, '0')}",
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black54,
+              ),
+            ),
+
+            const SizedBox(height: 15),
+
+            Text(
+              "Word ${currentIndex + 1} of ${words.length}",
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 10),
 
             LinearProgressIndicator(
               value: (currentIndex + 1) / words.length,
@@ -100,25 +133,21 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
               borderRadius: BorderRadius.circular(20),
             ),
 
-            const SizedBox(height: 50),
+            const SizedBox(height: 35),
 
             Expanded(
               child: Center(
                 child: Dismissible(
                   key: ValueKey(words[currentIndex]),
-
                   direction: DismissDirection.horizontal,
-
                   confirmDismiss: (direction) async {
                     if (direction == DismissDirection.startToEnd) {
                       knowIt();
                     } else {
                       practiceAgain();
                     }
-
                     return false;
                   },
-
                   background: Container(
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.only(left: 25),
@@ -132,7 +161,6 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
                       size: 40,
                     ),
                   ),
-
                   secondaryBackground: Container(
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(right: 25),
@@ -146,7 +174,6 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
                       size: 40,
                     ),
                   ),
-
                   child: Card(
                     elevation: 8,
                     shape: RoundedRectangleBorder(
@@ -177,7 +204,10 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
                 icon: const Icon(Icons.check),
                 label: const Text(
                   "I KNOW IT",
-                  style: TextStyle(fontSize: 22),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -196,7 +226,10 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
                 icon: const Icon(Icons.refresh),
                 label: const Text(
                   "PRACTICE AGAIN",
-                  style: TextStyle(fontSize: 22),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
@@ -210,5 +243,11 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 }
