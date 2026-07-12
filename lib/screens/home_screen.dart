@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'flash_dash_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -78,8 +79,15 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 65,
               child: ElevatedButton(
                 onPressed: () {
-
-                },
+                    Navigator.push(
+                      context,
+                    MaterialPageRoute(
+                      builder: (context) => FlashDashScreen(
+                        level: selectedLevel,
+                      ),
+                     ),
+                    );
+                  },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
                   foregroundColor: Colors.white,
