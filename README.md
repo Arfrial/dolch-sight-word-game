@@ -1,5 +1,4 @@
 # Flash Dash
-# VIDEO LINK: (https://www.loom.com/share/00682c7d86b546ee97c8e15b51f40430)
 
 ## Overview
 
@@ -101,6 +100,8 @@ flutter run
 8. View your score, completion time, and statistics.
 
 ---
+
+# VIDEO LINK: https://www.loom.com/share/00682c7d86b546ee97c8e15b51f40430
 
 ## Screenshots
 
