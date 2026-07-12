@@ -105,19 +105,19 @@ flutter run
 
 ### Home Screen
 
-![Home Screen](screenshots/home.png)
+![Home Screen](screenshots/home.PNG)
 
 ### Flash Dash
 
-![Flash Dash](screenshots/game.png)
+![Flash Dash](screenshots/game.PNG)
 
 ### Results
 
-![Results](screenshots/results.png)
+![Results](screenshots/results.PNG)
 
 ### Statistics
 
-![Statistics](screenshots/stats.png)
+![Statistics](screenshots/stats.PNG)
 
 ---
 
