@@ -34,32 +34,137 @@ class _StatsScreenState extends State<StatsScreen> {
         ? 0
         : scores.reduce((a, b) => a + b) / games;
 
+    int totalPoints = scores.fold(0, (sum, score) => sum + score);
+
     return Scaffold(
+      backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
-        title: const Text("Statistics"),
+        title: const Text("⭐ Statistics ⭐"),
         centerTitle: true,
+        backgroundColor: Colors.orange,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Text(
-              "Games Played: $games",
-              style: const TextStyle(fontSize: 26),
+
+            buildCard(
+              icon: Icons.sports_esports,
+              title: "Games Played",
+              value: "$games",
+              color: Colors.blue,
+            ),
+
+            const SizedBox(height: 18),
+
+            buildCard(
+              icon: Icons.emoji_events,
+              title: "Best Score",
+              value: "$best / 10",
+              color: Colors.green,
+            ),
+
+            const SizedBox(height: 18),
+
+            buildCard(
+              icon: Icons.trending_up,
+              title: "Average Score",
+              value: "${average.toStringAsFixed(1)} / 10",
+              color: Colors.purple,
+            ),
+
+            const SizedBox(height: 18),
+
+            buildCard(
+              icon: Icons.star,
+              title: "Total Points",
+              value: "$totalPoints",
+              color: Colors.orange,
+            ),
+
+            const Spacer(),
+
+            SizedBox(
+              width: double.infinity,
+              height: 60,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.home),
+                label: const Text(
+                  "HOME",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
 
             const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
 
-            Text(
-              "Best Score: $best / 10",
-              style: const TextStyle(fontSize: 26),
+  Widget buildCard({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+  }) {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 18,
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 28,
+              backgroundColor: color,
+              child: Icon(
+                icon,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(width: 20),
 
-            Text(
-              "Average Score: ${average.toStringAsFixed(1)} / 10",
-              style: const TextStyle(fontSize: 26),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
