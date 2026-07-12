@@ -1,5 +1,5 @@
 # Flash Dash
-# VIDEO LINK: [https://github.com/Arfrial/dolch-sight-word-game](https://www.loom.com/share/00682c7d86b546ee97c8e15b51f40430)
+# VIDEO LINK: (https://www.loom.com/share/00682c7d86b546ee97c8e15b51f40430)
 
 ## Overview
 
