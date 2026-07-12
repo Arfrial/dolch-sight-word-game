@@ -22,7 +22,7 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
   int currentIndex = 0;
 
   int firstTryCorrect = 0;
-  // Keeps track of words the player already missed once.
+
   final Set<String> missedWords = {};
 
   @override
@@ -30,48 +30,45 @@ class _FlashDashScreenState extends State<FlashDashScreen> {
     super.initState();
 
     words = List.from(DolchWords.levels[widget.level]!);
-
     words.shuffle(Random());
-
     words = words.take(10).toList();
   }
 
-void knowIt() {
-  if (!missedWords.contains(words[currentIndex])) {
-    firstTryCorrect++;
-  }
-
-  if (currentIndex == words.length - 1) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ResultsScreen(
-          score: firstTryCorrect,
-          total: words.length,
-        ),
-      ),
-    );
-    return;
-  }
-
-  setState(() {
-    currentIndex++;
-  });
-}
-
-void practiceAgain() {
-  setState(() {
-    missedWords.add(words[currentIndex]);
-
-    final word = words.removeAt(currentIndex);
-
-    words.add(word);
-
-    if (currentIndex >= words.length) {
-      currentIndex = words.length - 1;
+  void knowIt() {
+    if (!missedWords.contains(words[currentIndex])) {
+      firstTryCorrect++;
     }
-  });
-}
+
+    if (currentIndex == words.length - 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ResultsScreen(
+            score: firstTryCorrect,
+            total: words.length,
+          ),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      currentIndex++;
+    });
+  }
+
+  void practiceAgain() {
+    setState(() {
+      missedWords.add(words[currentIndex]);
+
+      final word = words.removeAt(currentIndex);
+      words.add(word);
+
+      if (currentIndex >= words.length) {
+        currentIndex = words.length - 1;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +84,6 @@ void practiceAgain() {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-
             Text(
               "Level: ${widget.level}",
               style: const TextStyle(
@@ -108,20 +104,64 @@ void practiceAgain() {
 
             Expanded(
               child: Center(
-                child: Card(
-                  elevation: 8,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+                child: Dismissible(
+                  key: ValueKey(words[currentIndex]),
+
+                  direction: DismissDirection.horizontal,
+
+                  confirmDismiss: (direction) async {
+                    if (direction == DismissDirection.startToEnd) {
+                      knowIt();
+                    } else {
+                      practiceAgain();
+                    }
+
+                    return false;
+                  },
+
+                  background: Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(left: 25),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: const Icon(
+                      Icons.check,
+                      color: Colors.white,
+                      size: 40,
+                    ),
                   ),
-                  child: Container(
-                    width: 320,
-                    height: 220,
-                    alignment: Alignment.center,
-                    child: Text(
-                      words[currentIndex],
-                      style: const TextStyle(
-                        fontSize: 52,
-                        fontWeight: FontWeight.bold,
+
+                  secondaryBackground: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 25),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: const Icon(
+                      Icons.refresh,
+                      color: Colors.white,
+                      size: 40,
+                    ),
+                  ),
+
+                  child: Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Container(
+                      width: 320,
+                      height: 220,
+                      alignment: Alignment.center,
+                      child: Text(
+                        words[currentIndex],
+                        style: const TextStyle(
+                          fontSize: 52,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
